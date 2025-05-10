@@ -1,6 +1,6 @@
 BIN = mouse_remap
 
-.PHONY: all
+.PHONY: all setup clean
 all:
 	gcc main.c -o $(BIN)
 
