@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 #include <sys/ioctl.h>
 #include <sys/time.h>
 
@@ -26,7 +25,7 @@ int setup_uinput_device() {
     int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
     if (fd < 0) {
         perror("Opening /dev/uinput");
-        exit(1);
+        exit(4);
     }
 
     // Enable mouse and keyboard event types
@@ -75,8 +74,8 @@ int main() {
     }
 
     if (ioctl(fd, EVIOCGRAB, 1) == -1) {
-        perror("Could not grab device");
-        return 1;
+        perror("Couldn't grab device");
+        return 2;
     }
 
     uinput_fd = setup_uinput_device();
