@@ -1,0 +1,25 @@
+[Unit]
+Description=Mouse side buttons to 8 and 9
+After=systemd-udev-settle.service
+Wants=systemd-udev-settle.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mouse-remap
+
+# Must be root for /dev/input + /dev/uinput
+User=root
+Group=root
+
+# Restart if the mouse disconnects or program crashes
+Restart=always
+RestartSec=1
+
+# Hardening (safe even for root here)
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target
