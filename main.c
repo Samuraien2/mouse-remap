@@ -2,7 +2,6 @@
 #include <linux/uinput.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <string.h>
 
 #define MOUSE_DEVICE "/dev/input/by-id/usb-Razer_Razer_DeathAdder_Elite-event-mouse"
 
@@ -22,14 +21,15 @@ void setup_uinput(int fd) {
 
     ioctl(fd, UI_SET_EVBIT, EV_SYN);
 
-    struct uinput_setup usetup = {0};
-    strcpy(usetup.name, "MCMouse");
-    usetup.id.bustype = BUS_USB;
-    usetup.id.vendor = 0x1234;
-    usetup.id.product = 0x5678;
-    usetup.id.version = 1;
-
-    ioctl(fd, UI_DEV_SETUP, &usetup);
+    ioctl(fd, UI_DEV_SETUP, &(struct uinput_setup){
+        .name = "MCMouse",
+        .id = {
+            .bustype = BUS_USB,
+            .vendor = 0x1234,
+            .product = 0x5678,
+            .version = 1
+        }
+    });
     ioctl(fd, UI_DEV_CREATE);
 }
 
@@ -60,6 +60,8 @@ int main() {
             else if (e.code == BTN_SIDE) e.code = KEY_9;
         }
         write(ufd, &e, sizeof(e));
+        struct input_event syn = { .type = EV_SYN, .code = SYN_REPORT, .value = 0 };
+        write(ufd, &syn, sizeof(syn));
     }
 
     ioctl(fd, EVIOCGRAB, 0);

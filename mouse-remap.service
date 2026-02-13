@@ -1,7 +1,7 @@
 [Unit]
-Description=Mouse side buttons to 8 and 9
-After=systemd-udev-settle.service
-Wants=systemd-udev-settle.service
+Description=Maps mouse side buttons to 8 and 9
+Requires=dev-input-by\x2did-usb-Razer_Razer_DeathAdder_Elite-event-mouse.device
+After=dev-input-by\x2did-usb-Razer_Razer_DeathAdder_Elite-event-mouse.device
 
 [Service]
 Type=simple
@@ -11,11 +11,9 @@ ExecStart=/usr/local/bin/mouse-remap
 User=root
 Group=root
 
-# Restart if the mouse disconnects or program crashes
 Restart=always
 RestartSec=1
 
-# Hardening (safe even for root here)
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=full

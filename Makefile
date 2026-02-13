@@ -1,7 +1,7 @@
 BIN = mouse-remap
 
 .PHONY: clean
-$(BIN):
+$(BIN): main.c
 	cc main.c -o $@ -O2 -s
 
 clean:
